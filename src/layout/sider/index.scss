@@ -1,0 +1,43 @@
+@import '../../styles/var.scss';
+
+.sider {
+  width: $layoutSiderWidth;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  height: 100vh;
+  transition: transform 0.2s;
+  background-color: #1f2329;
+
+  .trigger {
+    position: absolute;
+    top: 50%;
+    left: 1px;
+    transform: translate(-100%,-50%);
+    background-color: #23282f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 64px;
+    border-radius: 4px 0px 0px 4px;
+    cursor: pointer;
+    transition: width 0.2s, background-color 0.2s;
+
+    &:hover {
+      width: 24px;
+      background-color: #2a2f37;
+    }
+
+    > img {
+      transition: transform 0.2s;
+    }
+  }
+
+  &.isCollapsed {
+    transform: translateX(100%);
+    .trigger > img {
+      transform: rotateY(-180deg);
+    }
+  }
+}

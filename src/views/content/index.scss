@@ -1,0 +1,7 @@
+@import '../../styles/var.scss';
+
+.content-wrapper {
+  width: 100%;
+  min-height: 400px;
+  height: calc(100vh - 72px - 46px);
+}

@@ -1,0 +1,100 @@
+.side-bar {
+  .setting-card {
+    padding: 28px 16px;
+    &-title {
+      margin-bottom: 24px;
+      font-weight: bold;
+    }
+    &-options {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+  }
+  .wrapper-shape-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    .shape {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      background-color: #a4b2c1;
+      transition: background-color 0.2s;
+      &.circle {
+        border-radius: 50%;
+      }
+      &.squircle {
+        border-radius: 20%;
+      }
+      &.active {
+        background-color: #6967fe;
+      }
+    }
+  }
+  .bg-color-item {
+    padding: 10px 0px;
+    margin-right: 20px;
+    transition: transform .2s;
+    .bg-color {
+      display: inline-block;
+      position: relative;
+      cursor: pointer;
+      z-index: 0;
+      width: 24px;
+      height: 24px;
+      margin: 0 auto;
+      font-size: 16px;
+      border-radius: 50%;
+      &.empty {
+        background: #fff !important;
+        &::after {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          z-index: 1;
+          color: #ff4757;
+          font-weight: bold;
+          font-size: 20px;
+          transform: translate(-50%, -50%) scale(0.5);
+          opacity: 1;
+          content: '\\';
+        }
+      }
+      &::before {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        background: inherit;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0.5;
+        transition: width 0.15s, height 0.15s;
+        content: '';
+      }
+      &::after {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 1;
+        color: #1f2329;
+        font-size: 1.5rem;
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0;
+        transition: opacity 0.15s;
+        content: '\2714';
+      }
+      &.active {
+        &::before {
+          width: 160%;
+          height: 160%;
+        }
+        &::after {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

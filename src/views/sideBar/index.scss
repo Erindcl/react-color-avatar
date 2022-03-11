@@ -1,4 +1,6 @@
 .side-bar {
+  height: 100%;
+  overflow-y: auto;
   .setting-card {
     padding: 28px 16px;
     &-title {
@@ -95,6 +97,26 @@
           opacity: 1;
         }
       }
+    }
+  }
+  .widget-item {
+    width: 25%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80px;
+    padding: 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    > img {
+      width: 100%;
+    }
+    &:hover {
+      background-color: #181b20;
+    }
+    &.selected {
+      background-color: #2c323a;
     }
   }
 }

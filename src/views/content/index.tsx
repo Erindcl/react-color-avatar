@@ -4,7 +4,7 @@ import iconNext from '../../assets/icons/icon-next.svg';
 import iconFlip from '../../assets/icons/icon-flip.svg';
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
-import { AvatarOption } from '../../types'
+import { AvatarOption } from '../../types';
 import * as globalAction from "../../store/global/action";
 import './index.scss';
 

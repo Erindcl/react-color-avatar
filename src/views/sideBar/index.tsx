@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SETTINGS, previewData, NONE, settingNames } from '../../consts';
-import { WidgetType } from '../../enums';
+import { WidgetType, WrapperShape } from '../../enums';
 import { WidgetShape, AvatarOption } from '../../types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
@@ -22,7 +22,7 @@ interface IProps {
   setAvatarOption: (data: AvatarOption) => void;
 }
 
-const SideBar: React.FC<IProps> = ({ avatarOption }) => {
+const SideBar: React.FC<IProps> = ({ avatarOption, setAvatarOption }) => {
   const sectionList: WidgetType[] = Object.values(WidgetType);
   const [sections, setSections] = useState<ISections[]>([]);
 
@@ -45,8 +45,46 @@ const SideBar: React.FC<IProps> = ({ avatarOption }) => {
   })
 
   useEffect(() => {
+    console.log('sideBar--------------------------')
     console.log(avatarOption)
   }, [avatarOption])
+
+  const setWrapperShape = (value: WrapperShape) =>  {
+    if (value === avatarOption.wrapperShape) {
+      return false;
+    }
+    console.log(value)
+    // setAvatarOption({ ...avatarOption, wrapperShape: value })
+  }
+
+  const setBgColor = (value: string) =>  {
+    if (value === avatarOption.background?.color) {
+      return false;
+    }
+    // setAvatarOption({
+    //   ...avatarOption,
+    //   background: {
+    //     ...avatarOption.background,
+    //     color: value
+    //   }
+    // })
+  }
+
+  const setWidgets = (type: WidgetType, value: WidgetShape) =>  {
+    if (!value || !avatarOption.widgets?.[type] || avatarOption.widgets?.[type]?.shape === value) {
+      return false;
+    }
+    // setAvatarOption({
+    //   ...avatarOption,
+    //   widgets: {
+    //     ...avatarOption.widgets,
+    //     [type]: {
+    //       ...(avatarOption.widgets?.[type] || {}),
+    //       shape: value
+    //     }
+    //   }
+    // })
+  }
 
   const getWidgets = async (widgetType: WidgetType) => {
     const shapeList = SETTINGS[`${widgetType}Shape`];
@@ -75,8 +113,8 @@ const SideBar: React.FC<IProps> = ({ avatarOption }) => {
         <ul className="setting-card-options">
           {SETTINGS.wrapperShape.map(ele => {
             return (
-              <li key={ele} className="wrapper-shape-item">
-                <span className={ false ? `shape ${ele} active` : `shape ${ele}` }></span>
+              <li onClick={() => setWrapperShape(ele)} key={ele} className="wrapper-shape-item">
+                <span className={ avatarOption.wrapperShape === ele ? `shape ${ele} active` : `shape ${ele}` }></span>
               </li>
             )
           })}
@@ -87,8 +125,8 @@ const SideBar: React.FC<IProps> = ({ avatarOption }) => {
         <ul className="setting-card-options">
           {SETTINGS.backgroundColor.map(ele => {
             return (
-              <li key={ele} className="bg-color-item">
-                <span style={{ background: ele }} className={`bg-color ${false ? 'active' : null} ${ele === 'transparent' ? 'empty' : null}`}></span>
+              <li onClick={() => setBgColor(ele)} key={ele} className="bg-color-item">
+                <span style={{ background: ele }} className={`bg-color ${avatarOption.background?.color === ele ? 'active' : null} ${ele === 'transparent' ? 'empty' : null}`}></span>
               </li>
             )
           })}
@@ -101,7 +139,7 @@ const SideBar: React.FC<IProps> = ({ avatarOption }) => {
             <ul className="setting-card-options">
               {ele.widgetList.map(eleChild => {
                 return (
-                  <li key={eleChild.widgetShape} className={`widget-item ${false ? 'selected' : null}`}>
+                  <li  onClick={() => setWidgets(ele.widgetType, eleChild.widgetShape)} key={eleChild.widgetShape} className={`widget-item ${avatarOption.widgets?.[ele.widgetType]?.shape === eleChild.widgetShape ? 'selected' : null}`}>
                     {eleChild.widgetShape === NONE ?
                       <span>X</span>
                       : <img alt={eleChild.widgetShape} src={eleChild.svgRaw} />

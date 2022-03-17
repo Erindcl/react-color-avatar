@@ -1,5 +1,6 @@
 import { globalType } from './constant';
 import { AvatarOption } from '../../types'
+import { getRandomAvatarOption } from '../../utils'
 
 interface IState {
   history: {
@@ -12,10 +13,7 @@ interface IState {
 const initialState: IState = {
   history: {
     past: [],
-    present: {
-      background: { color: 'red' },
-      widgets: {}
-    },
+    present: getRandomAvatarOption(),
     future: [],
   }
 };

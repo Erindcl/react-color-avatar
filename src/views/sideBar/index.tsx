@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { SETTINGS, previewData, NONE, settingNames } from '../../consts';
 import { WidgetType } from '../../enums';
-import { WidgetShape } from '../../types';
+import { WidgetShape, AvatarOption } from '../../types';
+import { connect } from 'react-redux';
+import { bindActionCreators } from "redux";
+import { setAvatarOption } from "../../store/global/action";
 import './index.scss';
 
 interface IWidget {
@@ -14,7 +17,12 @@ interface ISections {
   widgetList: IWidget[]
 }
 
-const SideBar: React.FC = () => {
+interface IProps {
+  avatarOption: AvatarOption;
+  setAvatarOption: (data: AvatarOption) => void;
+}
+
+const SideBar: React.FC<IProps> = ({ avatarOption }) => {
   const sectionList: WidgetType[] = Object.values(WidgetType);
   const [sections, setSections] = useState<ISections[]>([]);
 
@@ -35,6 +43,10 @@ const SideBar: React.FC = () => {
       setSections(newSections);
     })()
   })
+
+  useEffect(() => {
+    console.log(avatarOption)
+  }, [avatarOption])
 
   const getWidgets = async (widgetType: WidgetType) => {
     const shapeList = SETTINGS[`${widgetType}Shape`];
@@ -105,4 +117,9 @@ const SideBar: React.FC = () => {
   )
 }
 
-export default SideBar
+export default connect(
+  (state: any) => ({
+    avatarOption: state.global.history.present
+  }),
+  (dispatch: any) => bindActionCreators({ setAvatarOption }, dispatch)
+)(SideBar)

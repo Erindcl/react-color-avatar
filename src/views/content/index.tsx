@@ -1,20 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import iconBack from '../../assets/icons/icon-back.svg';
-import iconRedo from '../../assets/icons/icon-next.svg';
+import iconNext from '../../assets/icons/icon-next.svg';
 import iconFlip from '../../assets/icons/icon-flip.svg';
+import { connect } from 'react-redux';
+import { bindActionCreators } from "redux";
+import { AvatarOption } from '../../types'
+import * as globalAction from "../../store/global/action";
 import './index.scss';
 
+interface IProps {
+  avatarOption: AvatarOption;
+  setAvatarOption: (data: AvatarOption) => void;
+  undo: () => void;
+  redo: () => void;
+}
 interface IMenu {
   title: string;
   src: string;
 }
 const menuList: IMenu[] = [
   { title: '撤销', src: iconBack },
-  { title: '还原', src: iconRedo },
+  { title: '还原', src: iconNext },
   { title: '水平翻转', src: iconFlip },
 ]
-const Content: React.FC = () => {
+const Content: React.FC<IProps> = ({ avatarOption }) => {
   const [ avatarSrc, setAvatarSrc ] = useState('');
+  useEffect(() => {
+    console.log(avatarOption)
+  })
   return (
     <div className="content-wrapper">
       <div className="avatar-wrapper">
@@ -40,4 +53,9 @@ const Content: React.FC = () => {
   )
 }
 
-export default Content
+export default connect(
+  (state: any) => ({
+    avatarOption: state.global.history.present
+  }),
+  (dispatch: any) => bindActionCreators({ ...globalAction }, dispatch)
+)(Content)

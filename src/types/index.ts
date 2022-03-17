@@ -59,6 +59,7 @@ export interface AvatarOption {
     color: string
   }
 
+  // Partial 快速将 AvatarWidgets 中的属性转为可选的
   widgets: Partial<AvatarWidgets>
 }
 

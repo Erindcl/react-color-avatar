@@ -2,6 +2,7 @@ import { globalType } from './constant';
 import { AvatarOption } from '../../types'
 
 export const setAvatarOption = (data: AvatarOption) => (dispatch: any) => {
+  console.log(data)
   dispatch({
     type: globalType.SET_AVATAR_OPTION,
     payload: data

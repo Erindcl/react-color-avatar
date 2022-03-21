@@ -42,48 +42,42 @@ const SideBar: React.FC<IProps> = ({ avatarOption, setAvatarOption }) => {
       })
       setSections(newSections);
     })()
-  })
-
-  useEffect(() => {
-    console.log('sideBar--------------------------')
-    console.log(avatarOption)
-  }, [avatarOption])
+  }, []) // 初始化页面的时候调用 只调用一次
 
   const setWrapperShape = (value: WrapperShape) =>  {
     if (value === avatarOption.wrapperShape) {
       return false;
     }
-    console.log(value)
-    // setAvatarOption({ ...avatarOption, wrapperShape: value })
+    setAvatarOption({ ...avatarOption, wrapperShape: value })
   }
 
   const setBgColor = (value: string) =>  {
     if (value === avatarOption.background?.color) {
       return false;
     }
-    // setAvatarOption({
-    //   ...avatarOption,
-    //   background: {
-    //     ...avatarOption.background,
-    //     color: value
-    //   }
-    // })
+    setAvatarOption({
+      ...avatarOption,
+      background: {
+        ...avatarOption.background,
+        color: value
+      }
+    })
   }
 
   const setWidgets = (type: WidgetType, value: WidgetShape) =>  {
     if (!value || !avatarOption.widgets?.[type] || avatarOption.widgets?.[type]?.shape === value) {
       return false;
     }
-    // setAvatarOption({
-    //   ...avatarOption,
-    //   widgets: {
-    //     ...avatarOption.widgets,
-    //     [type]: {
-    //       ...(avatarOption.widgets?.[type] || {}),
-    //       shape: value
-    //     }
-    //   }
-    // })
+    setAvatarOption({
+      ...avatarOption,
+      widgets: {
+        ...avatarOption.widgets,
+        [type]: {
+          ...(avatarOption.widgets?.[type] || {}),
+          shape: value
+        }
+      }
+    })
   }
 
   const getWidgets = async (widgetType: WidgetType) => {

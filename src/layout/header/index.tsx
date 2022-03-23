@@ -7,7 +7,7 @@ function Header() {
     <div className="header">
       <img src={logo} alt="logo" />
       <div className="website-title">Color Avatar</div>
-      <a href="xxx" className="github-link">Github</a>
+      <a href="https://github.com/Erindcl/react-color-avatar" className="github-link">Github</a>
     </div>
   );
 }

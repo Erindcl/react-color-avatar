@@ -18,6 +18,44 @@ import {
 
 export const NONE = 'none'
 
+export const AVATAR_LAYER: Readonly<{
+  [key in `${WidgetType}`]: { zIndex: number }
+}> = {
+  [WidgetType.Face]: {
+    zIndex: 10,
+  },
+  [WidgetType.Ear]: {
+    zIndex: 102,
+  },
+  [WidgetType.Earrings]: {
+    zIndex: 103,
+  },
+  [WidgetType.Eyebrows]: {
+    zIndex: 70,
+  },
+  [WidgetType.Eyes]: {
+    zIndex: 50,
+  },
+  [WidgetType.Nose]: {
+    zIndex: 60,
+  },
+  [WidgetType.Glasses]: {
+    zIndex: 90,
+  },
+  [WidgetType.Mouth]: {
+    zIndex: 100,
+  },
+  [WidgetType.Beard]: {
+    zIndex: 105,
+  },
+  [WidgetType.Tops]: {
+    zIndex: 80,
+  },
+  [WidgetType.Clothes]: {
+    zIndex: 110,
+  },
+}
+
 export const settingNames = {
   [WidgetType.Face]: '脸蛋',
   [WidgetType.Tops]: '头发 / 头饰',

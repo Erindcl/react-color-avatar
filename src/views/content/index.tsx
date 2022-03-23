@@ -6,6 +6,7 @@ import { getRandomAvatarOption } from '../../utils';
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import { AvatarOption } from '../../types';
+import { AVATAR_LAYER, widgetData, NONE } from '../../consts';
 import * as globalAction from "../../store/global/action";
 import './index.scss';
 
@@ -25,11 +26,70 @@ const menuList: IMenu[] = [
   { title: '还原', src: iconNext, key: 'redo' },
   { title: '水平翻转', src: iconFlip, key: 'flip' },
 ]
+const avatarSize = 280;
 const Content: React.FC<IProps> = ({ avatarOption, setAvatarOption, redo, undo }) => {
   const [ avatarSrc, setAvatarSrc ] = useState('');
   useEffect(() => {
-    console.log('content:------------------')
-    console.log(avatarOption)
+    (async() => {
+      // render avatar
+      if (!avatarOption) {
+        return false;
+      }
+      const sortedList = Object.entries(avatarOption.widgets).sort(
+        (i, ii) => {
+          const ix = (AVATAR_LAYER as any)[i[0]]?.zIndex ?? 0
+          const iix = (AVATAR_LAYER as any)[ii[0]]?.zIndex ?? 0
+          return ix - iix
+        }
+      )
+      const promises: Promise<string>[] = sortedList.map(
+        async ([widgetType , opt]) => {
+          if (opt.shape !== NONE && (widgetData as any)?.[widgetType]?.[opt.shape]) {
+            return (await (widgetData as any)[widgetType][opt.shape]()).default
+          }
+          return ''
+        }
+      )
+      const svgSrcList = await Promise.all(promises).then((raw) => {
+        return raw
+      })
+      const getSvgContentPromises = svgSrcList.map(
+        async (ele: string) => {
+          if (ele) {
+            return (await requestSvgContent(ele))
+          }
+          return ''
+        }
+      )
+      const svgRawList = await Promise.all(getSvgContentPromises).then((raw) => {
+        return raw.map((svgRaw: any, index) => {
+          const content = svgRaw
+            .slice(svgRaw.indexOf('>', svgRaw.indexOf('<svg')) + 1)
+            .replace('</svg>', '')
+
+          return `
+            <g id="react-color-avatar-${sortedList[index][0]}">
+              ${content}
+            </g>
+          `
+        })
+      })
+      const svgContent = `
+        <svg
+          width="${avatarSize}"
+          height="${avatarSize}"
+          viewBox="0 0 ${avatarSize / 0.7} ${avatarSize / 0.7}"
+          preserveAspectRatio="xMidYMax meet"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g transform="translate(100, 65)">
+            ${svgRawList.join('')}
+          </g>
+        </svg>
+      `;
+      setAvatarSrc(svgContent);
+    })()
   }, [avatarOption])
   const handleSetAvatar = () => {
     const present = getRandomAvatarOption();
@@ -52,12 +112,32 @@ const Content: React.FC<IProps> = ({ avatarOption, setAvatarOption, redo, undo }
         break;
     }
   }
+  const requestSvgContent = (src: string) => {
+    return fetch(src, {
+      method: 'GET',
+      headers: {
+        'content-type': 'image/svg+xml'
+      }
+    })
+    .then((response: any) => {
+      if (response.status > 299) {
+        throw new Error('Not found');
+      }
+      return response.text();
+    })
+    .then((content: string) => {
+      return content
+    })
+    .catch((err: any) => {
+      throw new Error(err);
+    })
+  }
   return (
     <div className="content-wrapper">
       <div className="avatar-wrapper">
-        <div className={`color-avatar circle`}>
-          <div style={{ backgroundColor: 'blue' }} className="avatar-background"></div>
-          <img alt="avatar" src={avatarSrc} className="avatar-payload" />
+        <div className={`color-avatar ${avatarOption.wrapperShape}`}>
+          <div style={{ background: avatarOption.background.color }} className="avatar-background"></div>
+          <div className="avatar-payload" dangerouslySetInnerHTML={{ __html: avatarSrc }} ></div>
         </div>
       </div>
       <ul className="menu-wrapper">

@@ -42,6 +42,7 @@ const SideBar: React.FC<IProps> = ({ avatarOption, setAvatarOption }) => {
       })
       setSections(newSections);
     })()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // 初始化页面的时候调用 只调用一次
 
   const setWrapperShape = (value: WrapperShape) =>  {

@@ -11,7 +11,7 @@ import {
   MouthShape,
   NoseShape,
   TopsShape,
-  WrapperShape,
+  WrapperShape
 } from '../enums'
 
 export type None = 'none'

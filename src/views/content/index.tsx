@@ -29,6 +29,9 @@ const menuList: IMenu[] = [
 const avatarSize = 280;
 const Content: React.FC<IProps> = ({ avatarOption, setAvatarOption, redo, undo }) => {
   const [ avatarSrc, setAvatarSrc ] = useState('');
+  const [ isFlip, setIsFlip ] = useState(false);
+  const [ downloading, setDownloading ] = useState(false);
+  const [ avatarRef, setAvatarRef ] = useState<any>();
   useEffect(() => {
     (async() => {
       // render avatar
@@ -106,6 +109,7 @@ const Content: React.FC<IProps> = ({ avatarOption, setAvatarOption, redo, undo }
         break;
       }
       case 'flip': {
+        setIsFlip(!isFlip);
         break;
       }
       default:
@@ -132,10 +136,31 @@ const Content: React.FC<IProps> = ({ avatarOption, setAvatarOption, redo, undo }
       throw new Error(err);
     })
   }
+  const handleDownload = async () => {
+    try {
+      setDownloading(true)
+      if (avatarRef) {
+        const html2canvas = (await import('html2canvas')).default
+        const canvas = await html2canvas(avatarRef, {
+          backgroundColor: null,
+        })
+        const dataURL = canvas.toDataURL()
+  
+        const trigger = document.createElement('a')
+        trigger.href = dataURL
+        trigger.download = 'vue-color-avatar.png'
+        trigger.click()
+      }
+    } finally {
+      setTimeout(() => {
+        setDownloading(false);
+      }, 1000)
+    }
+  }
   return (
     <div className="content-wrapper">
-      <div className="avatar-wrapper">
-        <div className={`color-avatar ${avatarOption.wrapperShape}`}>
+      <div ref={(instance: any) => setAvatarRef(instance)} className="avatar-wrapper">
+        <div style={{ transform: `rotateY(${isFlip ? -180 : 0}deg)` }} className={`color-avatar ${avatarOption.wrapperShape}`}>
           <div style={{ background: avatarOption.background.color }} className="avatar-background"></div>
           <div className="avatar-payload" dangerouslySetInnerHTML={{ __html: avatarSrc }} ></div>
         </div>
@@ -151,7 +176,7 @@ const Content: React.FC<IProps> = ({ avatarOption, setAvatarOption, redo, undo }
       </ul>
       <div className="action-wrapper">
         <div onClick={handleSetAvatar} className="action-randomize">随机生成</div>
-        <div className="action-download">下载头像</div>
+        <div onClick={handleDownload} className="action-download">{downloading ? '下载中...' : '下载头像'}</div>
       </div>
     </div>
   )

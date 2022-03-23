@@ -4,7 +4,7 @@
 
 > 参照 https://github.com/Codennnn/vue-color-avatar （vue版本） 开发
 
-![项目预览](./preview.jpg)
+![项目预览](/preview.jpg)
 
 ## 技术栈
 
